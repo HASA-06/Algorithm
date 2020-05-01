@@ -1,56 +1,36 @@
 function solution(bridge_length, weight, truck_weights) {
     var answer = 0;
     var currentBridge = Array(bridge_length).fill(0);
+    var truckTotalWeight = 0;
     
-    for(var indexOfTruck = 0; indexOfTruck < truck_weights.length; indexOfTruck++) {
-        console.log("\n" + indexOfTruck + '번째 트럭 대기');
-        isNextTruck(truck_weights[indexOfTruck]);
-
-        if(indexOfTruck == truck_weights.length - 1) {
-            if(totalTruckWeight == 0) {
-                console.log(answer);
-                return answer;
-            } else {
-                lastTruck();
-                console.log(answer);
-                return answer;
-            }
+    truck_weights.map((truck, index) => {
+        isNextTruck(truck);
+        
+        if(index == truck_weights.length - 1) {
+            lastTruck();
         }
-    }
+    });
+    
+    return answer;
 
     function lastTruck() {
-        while(totalTruckWeight() != 0) {
+        while(truckTotalWeight != 0) {
             passTruck(0);
         }
     }
 
     function isNextTruck(truckWeight) {
-        while(1) {
-            if(semiTotal() + truckWeight <= weight) {
-                passTruck(truckWeight);
-                break;
-            } 
-
+        while(truckTotalWeight - currentBridge[currentBridge.length - 1] + truckWeight > weight) {
             passTruck(0);
         }
+        
+        passTruck(truckWeight);
     }
 
     function passTruck(nextTruck) {
-        console.log("\n1초가 지났다");
-        currentBridge.pop();
+        truckTotalWeight -= currentBridge.pop();
+        truckTotalWeight += nextTruck;
         currentBridge.unshift(nextTruck);
         answer += 1;
-        console.log("현재 다리 위의 상태 : ", currentBridge);
-        console.log("현재 소요시간 : ", answer);
-    }
-
-    function totalTruckWeight() {
-        return currentBridge.reduce((a, b) => a + b, 0);
-    }
-
-    function semiTotal() {
-        return currentBridge.reduce((a, b) => a + b, 0) - currentBridge[currentBridge.length - 1];
     }
 }
-
-solution(2, 10, [7, 4, 5, 6]);
