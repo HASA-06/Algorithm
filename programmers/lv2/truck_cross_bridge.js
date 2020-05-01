@@ -9,11 +9,11 @@ function solution(bridge_length, weight, truck_weights) {
         if(indexOfTruck == truck_weights.length - 1) {
             if(totalTruckWeight == 0) {
                 console.log(answer);
-                return answer - (truck_weights.length - 2);
+                return answer;
             } else {
                 lastTruck();
                 console.log(answer);
-                return answer - (truck_weights.length - 2);
+                return answer;
             }
         }
     }
@@ -26,7 +26,7 @@ function solution(bridge_length, weight, truck_weights) {
 
     function isNextTruck(truckWeight) {
         while(1) {
-            if(totalTruckWeight() + truckWeight <= weight) {
+            if(semiTotal() + truckWeight <= weight) {
                 passTruck(truckWeight);
                 break;
             } 
@@ -46,6 +46,10 @@ function solution(bridge_length, weight, truck_weights) {
 
     function totalTruckWeight() {
         return currentBridge.reduce((a, b) => a + b, 0);
+    }
+
+    function semiTotal() {
+        return currentBridge.reduce((a, b) => a + b, 0) - currentBridge[currentBridge.length - 1];
     }
 }
 
